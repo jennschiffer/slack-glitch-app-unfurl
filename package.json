@@ -1,0 +1,15 @@
+{
+  "name": "slack-app-unfurling-example",
+  "version": "1.0.0",
+  "description": "Example app unfurling using Slack's Event API",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "author": "Jenn Schiffer <jenn@fogcreek.com>",
+  "dependencies": {
+    "axios": "^0.13.1",
+    "ws": "^1.1.1",
+		"request": "2.72.0",
+    "httpdispatcher":"*"
+  }
+}
