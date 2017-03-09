@@ -191,7 +191,23 @@ class TinySpeck extends EventEmitter {
     // Display the Add to Slack button
     dispatcher.onGet("/", function(req, res) {
       res.writeHead(200, {'Content-Type': 'text/html'});
-      let html = '<h1>Glitch\'s Slack App Unfurling App</h1><p>This project demonstrates how to build an app unfurling app using Slack\'s Events API and new chat unfurl endpoint.</p><p>To test it out:</p><a id="add-to-slack" href="'+add_to_slack+'"><img alt="Add to Slack" height="40" width="139" src="https://platform.slack-edge.com/img/add_to_slack.png" srcset="https://platform.slack-edge.com/img/add_to_slack.png 1x, https://platform.slack-edge.com/img/add_to_slack@2x.png 2x" /></a><footer id="gWidget"></footer><script src="https://widget.gomix.me/widget.min.js"></script>';
+      let html = `<div class="add-to-slack">
+            <h1>Glitch\'s Slack App Unfurling App</h1>
+            <h2>A link unfurling app using Slack's Events API and new chat unfurl endpoint</h2>
+            
+            <p>This project will respond to any message linking to Glitch project <br />
+            links with a set of actionable links for a richer Glitch experience!</p>
+
+            <a id="add-to-slack" href="${add_to_slack}"><img alt="Add to Slack" height="40" width="139" src="https://platform.slack-edge.com/img/add_to_slack.png" srcset="https://platform.slack-edge.com/img/add_to_slack.png 1x, https://platform.slack-edge.com/img/add_to_slack@2x.png 2x" /></a>
+          </div>
+
+          <div class="slack-support">
+            <p>For directions on how to set up your own unfurling app, <a href="/SETUP.md">read SETUP.md</a>.</p>
+            <p>For further help <a href="https://support.gomix.me">ask in the Glitch support forum</a>!</p>
+          </div>
+
+          <footer id="gWidget"></footer>
+          <script src="https://widget.gomix.me/widget.min.js"></script>`;
       res.end(html);
     });
     

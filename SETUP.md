@@ -13,7 +13,7 @@ Now go to the 'Basic Information page' and go to the 'App Credentials' section. 
 ## Step 4: Enable the Events API and Verify Your URL endpoint
 Go to the 'Event Subscriptions' page. Here you need to enable event subscriptions for your app by toggling the button to 'on'. Then you want to verify your project URL to use those events. Copy and paste your project's published URL into the 'Request URL' box (again it will have the format 'https://project-name.gomix.me'). You should get a verified message, indicating it successfully reached your project.
 
-Now you want to tell Slack which events you'll actually be using for your bot, so it only sends you those ones. In our App Unfurling App, we want to listen for URL shared events. So for 'Team Events', add 'url_shared' events. Add domains that you want to unfurl underneath that - this app looks specifically for Glitch app domain names, so you'll need to update the logic in `index.js` if you want to use your own! Click 'Save Changes' to finish.
+Now you want to tell Slack which events you'll actually be using for your bot, so it only sends you those ones. In our App Unfurling App, we want to listen for URL shared events. So for 'Team Events', add 'link_shared' events. Add domains that you want to unfurl underneath that - this app looks specifically for Glitch app domain names, so you'll need to update the logic in `index.js` if you want to use your own! Click 'Save Changes' to finish.
 
 ## Step 5: Select Permission Scopes and install to team for OAuth token
 Navigate back to the 'Oauth & Permissions' page. There should be a `links:read` scope under 'Permission Scopes' but you'll also need to add `links:write` so we can have Slack message back the unfurled responses. Click "Save Changes."
