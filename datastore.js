@@ -55,13 +55,13 @@ function connect() {
 
 function DatastoreKeyNeedToBeStringException(keyObject) {
   this.type = this.constructor.name;
-  this.description = "Datastore can only use strings as keys, got " + keyObject.constructor.name + " instead.";
+  this.description = 'Datastore can only use strings as keys, got ' + keyObject.constructor.name + ' instead.';
   this.key = keyObject;
 }
 
 function DatastoreUnknownException(method, args, ex) {
   this.type = this.constructor.name;
-  this.description = "An unknown error happened during the operation " + method;
+  this.description = 'An unknown error happened during the operation ' + method;
   this.method = method;
   this.args = args;
   this.error = ex;

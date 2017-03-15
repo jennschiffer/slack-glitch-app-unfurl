@@ -17,7 +17,6 @@ const color = '#ff00ff';
 let connected = false;
 getConnected() // Check we have a database connection
   .then(function(){
-    // slack.defaults.token
     let slack = ts.instance({});
 
     // listen for a url to be shared in a message
@@ -110,7 +109,8 @@ getConnected() // Check we have a database connection
               // finally, we send slack the unfurlMessage by calling the chat.unfurl endpoint
               // with unfurlMessage as the argument. 
               unfurlBot.send('chat.unfurl', unfurlMessage).then(res => { 
-                console.log('Response sent to unfurl', res.data);
+                console.log('Unfurl sent', unfurlMessage);
+                console.log('Response sent from unfurl', res.data);
               }, reason => { 
                 // on failure
                 console.log('An error occurred when responding to unfurl: ' + reason);

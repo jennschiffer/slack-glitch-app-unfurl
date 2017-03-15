@@ -1,10 +1,10 @@
-''//
+//
 // Adapted from https://github.com/johnagan/tinyspeck
 // This does much of the heavy-lifting for our bot. It does things like sending data to Slack's API,
 // parsing the Slack messages received, implementing the event handler as well as setting up a Web Server
 // to listen for WebHooks and set up the routes to serve pages for OAuth and the Add to Slack button.
 //
-"use strict";
+'use strict';
 
 const dispatcher = require('httpdispatcher'),
       http = require('http'),
@@ -12,7 +12,7 @@ const dispatcher = require('httpdispatcher'),
       WebSocket = require('ws'),
       qs = require('querystring'),
       EventEmitter = require('events'),
-      datastore = require("./datastore.js").data,
+      datastore = require('./datastore.js').data,
       oauthd = require('./oauthd.js'),
       add_to_slack = 'https://slack.com/oauth/authorize?scope=links:read,links:write,&client_id=' + process.env.SLACK_CLIENT_ID;
 
@@ -212,7 +212,7 @@ class TinySpeck extends EventEmitter {
     });       
     
     // Display the Add to Slack button
-    dispatcher.onGet("/", function(req, res) {
+    dispatcher.onGet('/', function(req, res) {
       res.writeHead(200, {'Content-Type': 'text/html'});
       res.end(html);
     });
@@ -229,7 +229,7 @@ class TinySpeck extends EventEmitter {
         this.emit(req.url, message); 
 
         // new subscription challenge
-        if (message.challenge){ console.log("verifying event subscription!"); res.end(message.challenge); return exit(); }
+        if (message.challenge){ console.log('verifying event subscription!'); res.end(message.challenge); return exit(); }
         
         // digest the incoming message
         if (!token || token === message.token) this.digest(message);
@@ -278,7 +278,7 @@ class TinySpeck extends EventEmitter {
       });
     } else {
       return axios({ // responding to event
-        url: endPoint+"?token="+token,
+        url: endPoint + '?token=' + token,
         data: payload,
         method: 'post',
         baseURL: 'https://slack.com/api/', 

@@ -8,7 +8,7 @@ To get started [remix this project](https://gomix.com/#!/remix/solid-tugboat) to
 Navigate to the 'OAuth & Permissions' page and under 'Redirect URLs' add your  project URL followed by '/auth/grant' - use your publish URL (click 'Show') which has the format 'https://project-name.gomix.me'. So for our example app, the URL is: 'https://slack-bot.gomix.me/auth/grant'. Click "Save URLs."
 
 ## Step 3: Copy Across the Slack Tokens
-Now go to the 'Basic Information page' and go to the 'App Credentials' section. You want to copy these details into your project's `.env` file. This is a file that securely stores your app credentials. There are entries for `SLACK_CLIENT_ID` and `SLACK_CLIENT_SECRET`. Copy and paste the entries from the App Credentials page for Client ID and Client Secret against the variable names. In step 4 you'll get your `SLACK_OAUTH_ACCESS_TOKEN`.
+Now go to the 'Basic Information page' and go to the 'App Credentials' section. You want to copy these details into your project's `.env` file. This is a file that securely stores your app credentials. There are entries for `SLACK_CLIENT_ID` and `SLACK_CLIENT_SECRET`. Copy and paste the entries from the App Credentials page for Client ID and Client Secret against the variable names. 
 
 ## Step 4: Enable the Events API and Verify Your URL endpoint
 Go to the 'Event Subscriptions' page. Here you need to enable event subscriptions for your app by toggling the button to 'on'. Then you want to verify your project URL to use those events. Copy and paste your project's published URL into the 'Request URL' box (again it will have the format 'https://project-name.gomix.me'). You should get a verified message, indicating it successfully reached your project.
@@ -18,9 +18,9 @@ Now you want to tell Slack which events you'll actually be using for your bot, s
 ## Step 5: Select Permission Scopes and install to team for OAuth token
 Navigate back to the 'Oauth & Permissions' page. There should be a `links:read` scope under 'Permission Scopes' but you'll also need to add `links:write` so we can have Slack message back the unfurled responses. Click "Save Changes."
 
-Scroll back to the top of the page under "OAuth Tokens & Redirect URLs" and click the "Install to team" button and authorize the app. You will be taken back to the "OAuth Tokens & Redirect URLs" page and see an "OAuth Access Token". Copy this to your `.env` file under `SLACK_OAUTH_ACCESS_TOKEN`.
-
 ## Testing Your App
+Go to your app landing page (you can click "Show" at the top of Glitch to find it, and this project's landing page is [solid-tugboat.glitch.me](https://solid-tugboat.glitch.me). 
+
 Your app should now be up and running and able to respond to actions you make in Slack. If you type messages with the domain you set up in the app it should unfurl!
 
 
