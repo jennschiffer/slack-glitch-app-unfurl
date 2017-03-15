@@ -1,4 +1,4 @@
-//
+''//
 // Adapted from https://github.com/johnagan/tinyspeck
 // This does much of the heavy-lifting for our bot. It does things like sending data to Slack's API,
 // parsing the Slack messages received, implementing the event handler as well as setting up a Web Server
@@ -12,9 +12,30 @@ const dispatcher = require('httpdispatcher'),
       WebSocket = require('ws'),
       qs = require('querystring'),
       EventEmitter = require('events'),
+      datastore = require("./datastore.js").data,
       oauthd = require('./oauthd.js'),
       add_to_slack = 'https://slack.com/oauth/authorize?scope=links:read,links:write,&client_id=' + process.env.SLACK_CLIENT_ID;
-    
+
+// html for the app's landing page
+let html = `<div class="add-to-slack">
+    <h1>Glitch Link Unfurling for Slack</h1>
+    <h2>This app unfurls links to apps on <a href="http://glitch.com">Glitch.com</a> using Slack's Events API and chat unfurl endpoint</h2>
+
+    <a id="add-to-slack" href="${add_to_slack}"><img alt="Add to Slack" height="40" width="139" src="https://platform.slack-edge.com/img/add_to_slack.png" srcset="https://platform.slack-edge.com/img/add_to_slack.png 1x, https://platform.slack-edge.com/img/add_to_slack@2x.png 2x" /></a>
+  </div>
+
+  <div class="slack-support">
+
+    <h4>Add this to your Slack and you'll get handy buttons whenever you link to Glitch apps, making it easy to run, view source, or remix the app. Then, remix this app to add cool unfurling features when Slack users link to your site or app.</h4>
+
+    <p><img src="https://cdn.gomix.com/834590ab-f27a-4fdb-b510-78986f4ba4bc%2Funfurl-screenshot.png" width="700px" /></p>
+    <p>For directions on how to set up your own unfurling app, <a href="https://gomix.com/#!/project/solid-tugboat">read SETUP.md in the project source</a>.</p>
+    <p>For further help <a href="https://support.gomix.me">ask in the Glitch support forum</a>!</p>
+  </div>
+
+  <footer id="gWidget"></footer>
+  <script src="https://widget.gomix.me/widget.min.js"></script>`;
+
 
 class TinySpeck extends EventEmitter {
   /**
@@ -166,23 +187,25 @@ class TinySpeck extends EventEmitter {
    * @return {listener} The HTTP listener
    */
   listen(port, token) {
+    
     // handle oauth from Slack
-    dispatcher.onGet("/auth/grant", function(req, res) {
+    dispatcher.onGet('/auth/grant', function(req, res) {
       if(req.params.code){
         res.writeHead(200, {'Content-Type': 'text/html'});
-        let html = '<p>Success! Authed ok</p>';
-        res.end(html);
+        res.end('<p class="slack-flag success">Success! [extreme hacker voice] <em>you\'re in</em></p>' + html);
       } else {
         res.writeHead(200, {'Content-Type': 'text/html'});
-        let html = '<p>Failed! Something went wrong when authing, check the logs</p>';
-        res.end(html);    
+        res.end('<p class="slack-flag error">Error! Something went wrong when authenticating your team</p>' + html);    
       }
       
       // get the code, turn it into a token    
       let code = req.params.code;
-      oauthd.oauth(code)
-        .then()
-        .catch(function(error) {
+      oauthd.oauth(code).then(function(body) {
+        //store body.access_token;
+        datastore.set(body.team_id, body.access_token).then(function(){
+          console.log('token stored', body.access_token); 
+        });
+      }).catch(function(error) {
           console.log(error);
           res.send(error);
         });
@@ -191,23 +214,6 @@ class TinySpeck extends EventEmitter {
     // Display the Add to Slack button
     dispatcher.onGet("/", function(req, res) {
       res.writeHead(200, {'Content-Type': 'text/html'});
-      let html = `<div class="add-to-slack">
-            <h1>Glitch\'s Slack App Unfurling App</h1>
-            <h2>A link unfurling app using Slack's Events API and new chat unfurl endpoint</h2>
-            
-            <p>This project will respond to any message linking to Glitch project <br />
-            links with a set of actionable links for a richer Glitch experience!</p>
-
-            <a id="add-to-slack" href="${add_to_slack}"><img alt="Add to Slack" height="40" width="139" src="https://platform.slack-edge.com/img/add_to_slack.png" srcset="https://platform.slack-edge.com/img/add_to_slack.png 1x, https://platform.slack-edge.com/img/add_to_slack@2x.png 2x" /></a>
-          </div>
-
-          <div class="slack-support">
-            <p>For directions on how to set up your own unfurling app, <a href="/SETUP.md">read SETUP.md</a>.</p>
-            <p>For further help <a href="https://support.gomix.me">ask in the Glitch support forum</a>!</p>
-          </div>
-
-          <footer id="gWidget"></footer>
-          <script src="https://widget.gomix.me/widget.min.js"></script>`;
       res.end(html);
     });
     
@@ -248,13 +254,9 @@ class TinySpeck extends EventEmitter {
    * @return {Promise} A promise with the api result
    */
   post(endPoint, payload) {
+    let token = payload.token;
     payload = payload[0];
-    
-    // setting the token to be what is in the .env file
-    // this can be retrieved in the OAUTH & Permissions section
-    // of the api.slack.apps page where you created
-    let token = process.env.SLACK_OAUTH_ACCESS_TOKEN;
-    
+
     if (!/^http/i.test(endPoint)) {
       // serialize JSON params
       if (payload.attachments)
