@@ -2,15 +2,12 @@
 // This is a library file that handles the OAuth flow with Slack.
 //
 
-var rq = require('request');
+'use strict'
 
-module.exports = {
-  oauth: oauth
-};
+var rq = require('request');
 
 // https://api.slack.com/methods/oauth.access
 function oauth(code, uri) {
-  console.log('oauth', code, uri)
   return post({
     url: 'https://slack.com/api/oauth.access',
     transform: JSON.parse,
@@ -42,4 +39,8 @@ function post(options) {
         }
       });
   });
-}
+} 
+
+module.exports = {
+  oauth: oauth
+};
