@@ -6,6 +6,6 @@ This project demonstrates how to build an app unfurling app using Slack's Events
 To get started you need to:
 - Set up your Slack App in Slack
 - Copy across the Slack API tokens into the `.env` file
-- the index html is generated in `tinyspeck.js` around line 194
+- the index/landing page html is generated in `tinyspeck.js` around line 20
 
 For more detailed setup instructions, see `setup.md`.
